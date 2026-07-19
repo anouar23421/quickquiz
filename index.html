@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuickQuiz — Teste-toi en 60 secondes</title>
+<style>
+  :root{
+    --ink:#12101c;
+    --ink-2:#1c1930;
+    --buzzer:#ff3b3b;
+    --gold:#ffc93c;
+    --cream:#f4f1ff;
+    --ok:#3ade7a;
+    --muted:#a49bc7;
+    --font-display:'Unbounded', system-ui, sans-serif;
+    --font-body:'Inter', system-ui, sans-serif;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap');
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--cream);
+    font-family:var(--font-body);
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 6%;
+    background:rgba(18,16,28,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(244,241,255,0.08);
+  }
+  .logo{
+    font-family:var(--font-display);
+    font-weight:900;
+    font-size:1.3rem;
+    letter-spacing:-0.5px;
+  }
+  .logo span{color:var(--buzzer);}
+  .nav-cta{
+    background:var(--gold);
+    color:var(--ink);
+    font-weight:700;
+    font-size:0.85rem;
+    padding:10px 18px;
+    border-radius:100px;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:80px 6% 60px;
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:40px;
+    align-items:center;
+    max-width:1300px;
+    margin:0 auto;
+  }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(255,59,59,0.12);
+    border:1px solid rgba(255,59,59,0.4);
+    color:var(--buzzer);
+    font-size:0.78rem;font-weight:700;
+    padding:6px 14px;border-radius:100px;
+    margin-bottom:22px;
+    text-transform:uppercase;letter-spacing:0.06em;
+  }
+  .hero h1{
+    font-family:var(--font-display);
+    font-size:clamp(2.4rem, 5vw, 3.6rem);
+    font-weight:900;
+    line-height:1.05;
+    letter-spacing:-1px;
+    margin-bottom:20px;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--gold);
+    -webkit-text-stroke:1px var(--buzzer);
+  }
+  .hero p{
+    color:var(--muted);
+    font-size:1.05rem;
+    max-width:480px;
+    margin-bottom:30px;
+  }
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--buzzer);
+    color:white;
+    font-weight:700;
+    padding:15px 26px;
+    border-radius:100px;
+    border:none;
+    cursor:pointer;
+    font-size:1rem;
+    box-shadow:0 8px 24px rgba(255,59,59,0.35);
+    transition:transform 0.15s ease;
+  }
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-ghost{
+    border:1px solid rgba(244,241,255,0.25);
+    padding:15px 26px;
+    border-radius:100px;
+    font-weight:600;
+    color:var(--cream);
+  }
+
+  /* buzzer visual */
+  .buzzer-wrap{display:flex;justify-content:center;align-items:center;position:relative;}
+  .buzzer{
+    width:260px;height:260px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #ff6a6a, var(--buzzer) 60%, #b02020 100%);
+    box-shadow:0 20px 60px rgba(255,59,59,0.45), inset 0 -10px 20px rgba(0,0,0,0.3);
+    display:flex;align-items:center;justify-content:center;
+    animation:pulse 2.4s ease-in-out infinite;
+    position:relative;
+  }
+  .buzzer:before{
+    content:'';
+    position:absolute;inset:-18px;
+    border:2px dashed rgba(255,201,60,0.5);
+    border-radius:50%;
+    animation:spin 14s linear infinite;
+  }
+  .buzzer-label{
+    font-family:var(--font-display);
+    font-weight:900;
+    color:white;
+    font-size:1.1rem;
+    text-align:center;
+    text-shadow:0 2px 6px rgba(0,0,0,0.4);
+  }
+  @keyframes pulse{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.04);}
+  }
+  @keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+  }
+  @media(prefers-reduced-motion: reduce){
+    .buzzer, .buzzer:before{animation:none;}
+  }
+
+  /* ---------- STRIP ---------- */
+  .strip{
+    border-top:1px solid rgba(244,241,255,0.08);
+    border-bottom:1px solid rgba(244,241,255,0.08);
+    padding:18px 6%;
+    display:flex;justify-content:center;gap:48px;flex-wrap:wrap;
+    color:var(--muted);
+    font-size:0.85rem;font-weight:600;
+    letter-spacing:0.04em;
+  }
+  .strip strong{color:var(--gold);}
+
+  /* ---------- CATEGORIES ---------- */
+  .section{padding:70px 6%;max-width:1300px;margin:0 auto;}
+  .section-head{margin-bottom:36px;max-width:600px;}
+  .section-head .eyebrow{margin-bottom:14px;}
+  .section-head h2{
+    font-family:var(--font-display);
+    font-size:clamp(1.8rem,3vw,2.4rem);
+    font-weight:700;
+    letter-spacing:-0.5px;
+  }
+  .section-head p{color:var(--muted);margin-top:10px;}
+
+  .cat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    gap:18px;
+  }
+  .cat-card{
+    background:var(--ink-2);
+    border:1px solid rgba(244,241,255,0.08);
+    border-radius:18px;
+    padding:26px;
+    cursor:pointer;
+    transition:transform 0.18s ease, border-color 0.18s ease;
+    position:relative;
+    overflow:hidden;
+  }
+  .cat-card:hover{transform:translateY(-4px);border-color:var(--gold);}
+  .cat-card .icon{font-size:2rem;margin-bottom:14px;display:block;}
+  .cat-card h3{font-family:var(--font-display);font-size:1.05rem;margin-bottom:6px;}
+  .cat-card p{color:var(--muted);font-size:0.85rem;}
+  .cat-card .count{
+    position:absolute;top:20px;right:20px;
+    font-size:0.7rem;color:var(--ink);
+    background:var(--gold);
+    padding:3px 9px;border-radius:100px;font-weight:700;
+  }
+
+  /* ---------- QUIZ MODAL ---------- */
+  .quiz-overlay{
+    position:fixed;inset:0;
+    background:rgba(10,9,16,0.88);
+    backdrop-filter:blur(6px);
+    display:none;
+    align-items:center;justify-content:center;
+    z-index:100;
+    padding:20px;
+  }
+  .quiz-overlay.active{display:flex;}
+  .quiz-box{
+    background:var(--ink-2);
+    border:1px solid rgba(244,241,255,0.1);
+    border-radius:24px;
+    width:100%;max-width:560px;
+    padding:34px;
+    position:relative;
+  }
+  .quiz-close{
+    position:absolute;top:18px;right:18px;
+    background:none;border:none;color:var(--muted);
+    font-size:1.4rem;cursor:pointer;
+  }
+  .quiz-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+  .quiz-progress{font-size:0.8rem;color:var(--muted);font-weight:600;}
+  .timer-ring{position:relative;width:52px;height:52px;}
+  .timer-ring svg{transform:rotate(-90deg);}
+  .timer-ring circle{fill:none;stroke-width:5;}
+  .timer-bg{stroke:rgba(244,241,255,0.1);}
+  .timer-fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset 1s linear;}
+  .timer-num{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:0.9rem;
+  }
+  .quiz-question{
+    font-family:var(--font-display);
+    font-size:1.3rem;font-weight:700;
+    margin-bottom:22px;line-height:1.3;
+  }
+  .quiz-options{display:flex;flex-direction:column;gap:10px;}
+  .quiz-option{
+    text-align:left;
+    background:rgba(244,241,255,0.05);
+    border:1px solid rgba(244,241,255,0.1);
+    color:var(--cream);
+    padding:14px 18px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:0.95rem;font-weight:600;
+    display:flex;align-items:center;gap:12px;
+    transition:background 0.15s ease, border-color 0.15s ease;
+  }
+  .quiz-option .letter{
+    width:26px;height:26px;border-radius:8px;
+    background:rgba(244,241,255,0.1);
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.8rem;flex-shrink:0;
+  }
+  .quiz-option:hover{border-color:var(--gold);}
+  .quiz-option.correct{background:rgba(58,222,122,0.15);border-color:var(--ok);}
+  .quiz-option.wrong{background:rgba(255,59,59,0.15);border-color:var(--buzzer);}
+  .quiz-option:disabled{cursor:default;}
+
+  .result-box{text-align:center;}
+  .result-score{
+    font-family:var(--font-display);
+    font-size:3.4rem;font-weight:900;
+    color:var(--gold);
+    margin:10px 0;
+  }
+  .result-msg{color:var(--muted);margin-bottom:26px;}
+  .result-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+
+  /* ---------- AD SLOT ---------- */
+  .ad-slot{
+    border:1px dashed rgba(244,241,255,0.2);
+    border-radius:16px;
+    padding:30px;
+    text-align:center;
+    color:var(--muted);
+    font-size:0.8rem;
+    margin:50px 0;
+  }
+
+  /* ---------- HOW ---------- */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .step{
+    background:var(--ink-2);
+    border-radius:18px;
+    padding:26px;
+    border:1px solid rgba(244,241,255,0.08);
+  }
+  .step .num{
+    font-family:var(--font-display);
+    color:var(--buzzer);
+    font-size:1.6rem;font-weight:900;
+    margin-bottom:10px;
+  }
+  .step h3{font-family:var(--font-display);font-size:1rem;margin-bottom:8px;}
+  .step p{color:var(--muted);font-size:0.9rem;}
+
+  /* ---------- TIKTOK CTA ---------- */
+  .tiktok-cta{
+    background:linear-gradient(135deg, var(--ink-2), #241f3d);
+    border-radius:24px;
+    padding:50px 6%;
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:24px;
+    max-width:1300px;margin:0 auto 70px;
+    border:1px solid rgba(255,201,60,0.2);
+  }
+  .tiktok-cta h3{
+    font-family:var(--font-display);
+    font-size:1.5rem;font-weight:700;max-width:420px;
+  }
+  .tiktok-cta p{color:var(--muted);margin-top:8px;max-width:420px;}
+
+  footer{
+    text-align:center;
+    padding:34px 6%;
+    color:var(--muted);
+    font-size:0.8rem;
+    border-top:1px solid rgba(244,241,255,0.08);
+  }
+
+  @media(max-width:860px){
+    .hero{grid-template-columns:1fr;}
+    .buzzer-wrap{order:-1;}
+    .steps{grid-template-columns:1fr;}
+    .tiktok-cta{flex-direction:column;text-align:center;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Quick<span>Quiz</span></div>
+  <a href="#categories" class="nav-cta">Jouer maintenant</a>
+</nav>
+
+<section class="hero">
+  <div>
+    <span class="eyebrow">● Nouveau quiz chaque jour</span>
+    <h1>Réponds vite.<br>Prouve que <em>tu sais</em>.</h1>
+    <p>Des quiz éclairs sur la culture générale, le ciné, la musique, le sport et plus encore — inspirés des questions que tu vois sur @quickquiz. 60 secondes, un score, et le droit de flexer en commentaire.</p>
+    <div class="hero-actions">
+      <a href="#categories" class="btn-primary">Lancer un quiz</a>
+      <a href="#tiktok" class="btn-ghost">Voir sur TikTok</a>
+    </div>
+  </div>
+  <div class="buzzer-wrap">
+    <div class="buzzer">
+      <div class="buzzer-label">APPUIE<br>POUR<br>JOUER</div>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div><strong>6</strong> catégories</div>
+  <div><strong>+30</strong> questions</div>
+  <div><strong>0€</strong> — gratuit à vie</div>
+  <div><strong>60s</strong> par quiz</div>
+</div>
+
+<section class="section" id="categories">
+  <div class="section-head">
+    <span class="eyebrow">Catégories</span>
+    <h2>Choisis ton terrain de jeu</h2>
+    <p>Chaque catégorie propose des questions à choix multiples, chronométrées. Ton score final se partage en un clic.</p>
+  </div>
+  <div class="cat-grid" id="catGrid"></div>
+</section>
+
+<section class="section">
+  <div class="ad-slot">
+    Emplacement publicitaire (ex. Google AdSense) — à activer une fois le site en ligne et le trafic lancé.
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <span class="eyebrow">Comment ça marche</span>
+    <h2>3 étapes, zéro friction</h2>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="num">01</div>
+      <h3>Choisis une catégorie</h3>
+      <p>Culture générale, ciné, musique, sport, sciences ou géo — comme dans tes vidéos TikTok.</p>
+    </div>
+    <div class="step">
+      <div class="num">02</div>
+      <h3>Réponds contre la montre</h3>
+      <p>5 questions, un minuteur qui tourne. La pression rend le jeu plus fun.</p>
+    </div>
+    <div class="step">
+      <div class="num">03</div>
+      <h3>Partage ton score</h3>
+      <p>Défie tes abonnés en commentaire ou en story pour faire grimper la chaîne.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="tiktok">
+  <div class="tiktok-cta">
+    <div>
+      <h3>Retrouve encore plus de questions sur TikTok</h3>
+      <p>Suis @quickquiz pour un nouveau quiz vidéo chaque jour, et reviens ici pour rejouer et comparer ton score.</p>
+    </div>
+    <a href="https://www.tiktok.com/@quickquiz" target="_blank" class="btn-primary">Suivre @quickquiz</a>
+  </div>
+</section>
+
+<footer>
+  QuickQuiz — fait avec 🧠 pour les curieux. © 2026
+</footer>
+
+<!-- ---------- QUIZ MODAL ---------- -->
+<div class="quiz-overlay" id="overlay">
+  <div class="quiz-box" id="quizBox"></div>
+</div>
+
+<script>
+const QUIZ_DATA = {
+  culture: {
+    icon:'🧠', name:'Culture générale', desc:'Un peu de tout, pour briller partout.',
+    questions:[
+      {q:"Combien de continents compte-t-on sur Terre ?", options:["5","6","7","8"], answer:2},
+      {q:"Quelle est la monnaie du Japon ?", options:["Yuan","Won","Yen","Ringgit"], answer:2},
+      {q:"Qui a peint la Joconde ?", options:["Michel-Ange","Léonard de Vinci","Raphaël","Botticelli"], answer:1},
+      {q:"Quel est le plus grand océan du monde ?", options:["Atlantique","Indien","Arctique","Pacifique"], answer:3},
+      {q:"Combien de côtés a un hexagone ?", options:["5","6","7","8"], answer:1}
+    ]
+  },
+  cine: {
+    icon:'🎬', name:'Ciné & Séries', desc:'Sauras-tu répondre sans spoiler ?',
+    questions:[
+      {q:"Dans quel film entend-on 'Que la Force soit avec toi' ?", options:["Star Trek","Star Wars","Dune","Interstellar"], answer:1},
+      {q:"Qui réalise 'Inception' ?", options:["Steven Spielberg","James Cameron","Christopher Nolan","Denis Villeneuve"], answer:2},
+      {q:"Dans quelle ville se déroule 'Friends' ?", options:["Los Angeles","Chicago","New York","Boston"], answer:2},
+      {q:"Quel studio a produit 'Toy Story' ?", options:["DreamWorks","Pixar","Illumination","Blue Sky"], answer:1},
+      {q:"Combien de saisons compte 'Breaking Bad' ?", options:["4","5","6","7"], answer:1}
+    ]
+  },
+  musique: {
+    icon:'🎵', name:'Musique', desc:'Des tubes aux classiques.',
+    questions:[
+      {q:"Quel groupe a sorti l'album 'Abbey Road' ?", options:["The Rolling Stones","The Beatles","Queen","Pink Floyd"], answer:1},
+      {q:"Quel instrument compte 88 touches ?", options:["Guitare","Violon","Piano","Harpe"], answer:2},
+      {q:"Qui est surnommée la 'Queen of Pop' ?", options:["Beyoncé","Madonna","Rihanna","Ariana Grande"], answer:1},
+      {q:"De quel pays est originaire la K-pop ?", options:["Japon","Chine","Corée du Sud","Thaïlande"], answer:2},
+      {q:"Quel festival français est dédié à la musique électronique et se tient à Paris ?", options:["Rock en Seine","Solidays","We Love Green","Lollapalooza"], answer:2}
+    ]
+  },
+  sport: {
+    icon:'⚽', name:'Sport', desc:'Records, règles et champions.',
+    questions:[
+      {q:"Tous les combien d'années se déroulent les Jeux Olympiques d'été ?", options:["2 ans","3 ans","4 ans","5 ans"], answer:2},
+      {q:"Combien de joueurs compte une équipe de football sur le terrain ?", options:["9","10","11","12"], answer:2},
+      {q:"Dans quel sport utilise-t-on le terme 'ace' ?", options:["Golf","Tennis","Basket","Boxe"], answer:1},
+      {q:"Quel pays a remporté la Coupe du Monde de football 2018 ?", options:["Brésil","Allemagne","France","Croatie"], answer:2},
+      {q:"Combien de temps dure un match de basket NBA (hors prolongations) ?", options:["40 min","44 min","48 min","52 min"], answer:2}
+    ]
+  },
+  sciences: {
+    icon:'🔬', name:'Sciences', desc:'Pour les curieux du pourquoi du comment.',
+    questions:[
+      {q:"Quelle est la planète la plus proche du Soleil ?", options:["Vénus","Mercure","Mars","Terre"], answer:1},
+      {q:"Quel gaz les plantes absorbent-elles principalement ?", options:["Oxygène","Azote","CO2","Hydrogène"], answer:2},
+      {q:"Combien d'os compte le corps humain adulte ?", options:["186","206","226","246"], answer:1},
+      {q:"Quel est l'élément chimique symbolisé par 'Fe' ?", options:["Fluor","Fer","Francium","Ferrite"], answer:1},
+      {q:"À quelle vitesse voyage la lumière dans le vide (arrondie) ?", options:["150 000 km/s","300 000 km/s","450 000 km/s","1M km/s"], answer:1}
+    ]
+  },
+  geo: {
+    icon:'🌍', name:'Géographie', desc:'Cartes, capitales et frontières.',
+    questions:[
+      {q:"Quelle est la capitale de l'Australie ?", options:["Sydney","Melbourne","Canberra","Perth"], answer:2},
+      {q:"Quel est le plus long fleuve du monde ?", options:["Amazone","Nil","Yangtsé","Mississippi"], answer:1},
+      {q:"Combien de pays compte l'Union Européenne (en 2026) ?", options:["25","26","27","28"], answer:2},
+      {q:"Quel désert est le plus grand du monde ?", options:["Sahara","Gobi","Antarctique","Kalahari"], answer:2},
+      {q:"Quelle chaîne de montagnes sépare l'Europe de l'Asie ?", options:["Alpes","Andes","Oural","Himalaya"], answer:2}
+    ]
+  }
+};
+
+const catGrid = document.getElementById('catGrid');
+Object.entries(QUIZ_DATA).forEach(([key, cat])=>{
+  const card = document.createElement('div');
+  card.className = 'cat-card';
+  card.innerHTML = `
+    <span class="count">${cat.questions.length} Q</span>
+    <span class="icon">${cat.icon}</span>
+    <h3>${cat.name}</h3>
+    <p>${cat.desc}</p>
+  `;
+  card.addEventListener('click', ()=> startQuiz(key));
+  catGrid.appendChild(card);
+});
+
+const overlay = document.getElementById('overlay');
+const quizBox = document.getElementById('quizBox');
+let currentQuiz = null;
+let qIndex = 0;
+let score = 0;
+let timer = null;
+let timeLeft = 12;
+const TIME_TOTAL = 12;
+
+function startQuiz(key){
+  currentQuiz = QUIZ_DATA[key];
+  qIndex = 0;
+  score = 0;
+  overlay.classList.add('active');
+  renderQuestion();
+}
+
+function closeQuiz(){
+  overlay.classList.remove('active');
+  clearInterval(timer);
+}
+
+function renderQuestion(){
+  clearInterval(timer);
+  timeLeft = TIME_TOTAL;
+  const item = currentQuiz.questions[qIndex];
+  const letters = ['A','B','C','D'];
+
+  quizBox.innerHTML = `
+    <button class="quiz-close" onclick="closeQuiz()">✕</button>
+    <div class="quiz-top">
+      <span class="quiz-progress">Question ${qIndex+1} / ${currentQuiz.questions.length}</span>
+      <div class="timer-ring">
+        <svg width="52" height="52">
+          <circle class="timer-bg" cx="26" cy="26" r="21"></circle>
+          <circle class="timer-fg" id="timerFg" cx="26" cy="26" r="21"
+            stroke-dasharray="131.9" stroke-dashoffset="0"></circle>
+        </svg>
+        <div class="timer-num" id="timerNum">${timeLeft}</div>
+      </div>
+    </div>
+    <div class="quiz-question">${item.q}</div>
+    <div class="quiz-options" id="optionsWrap">
+      ${item.options.map((opt,i)=>`
+        <button class="quiz-option" data-i="${i}">
+          <span class="letter">${letters[i]}</span> ${opt}
+        </button>
+      `).join('')}
+    </div>
+  `;
+
+  document.querySelectorAll('.quiz-option').forEach(btn=>{
+    btn.addEventListener('click', ()=> selectAnswer(parseInt(btn.dataset.i)));
+  });
+
+  const circle = document.getElementById('timerFg');
+  const numEl = document.getElementById('timerNum');
+  const circumference = 131.9;
+  timer = setInterval(()=>{
+    timeLeft--;
+    numEl.textContent = timeLeft;
+    circle.style.strokeDashoffset = circumference * (1 - timeLeft/TIME_TOTAL);
+    if(timeLeft <= 0){
+      clearInterval(timer);
+      selectAnswer(-1);
+    }
+  }, 1000);
+}
+
+function selectAnswer(i){
+  clearInterval(timer);
+  const item = currentQuiz.questions[qIndex];
+  const opts = document.querySelectorAll('.quiz-option');
+  opts.forEach(o=> o.disabled = true);
+  if(i === item.answer) score++;
+  opts.forEach(o=>{
+    const oi = parseInt(o.dataset.i);
+    if(oi === item.answer) o.classList.add('correct');
+    else if(oi === i) o.classList.add('wrong');
+  });
+
+  setTimeout(()=>{
+    qIndex++;
+    if(qIndex < currentQuiz.questions.length){
+      renderQuestion();
+    } else {
+      renderResult();
+    }
+  }, 900);
+}
+
+function renderResult(){
+  const total = currentQuiz.questions.length;
+  let msg = "Pas mal, reviens demain pour un nouveau score !";
+  if(score === total) msg = "Score parfait. Tu es prêt pour TikTok Live !";
+  else if(score >= total*0.6) msg = "Solide ! Encore un petit effort pour le sans-faute.";
+  else msg = "Ça se travaille — retente ta chance !";
+
+  quizBox.innerHTML = `
+    <button class="quiz-close" onclick="closeQuiz()">✕</button>
+    <div class="result-box">
+      <span class="eyebrow">Résultat</span>
+      <div class="result-score">${score}/${total}</div>
+      <p class="result-msg">${msg}</p>
+      <div class="result-actions">
+        <button class="btn-primary" onclick="startQuiz(currentKeyOf(currentQuiz))">Rejouer</button>
+        <a href="https://www.tiktok.com/@quickquiz" target="_blank" class="btn-ghost">Suivre @quickquiz</a>
+      </div>
+    </div>
+  `;
+}
+
+function currentKeyOf(quizObj){
+  return Object.keys(QUIZ_DATA).find(k => QUIZ_DATA[k] === quizObj);
+}
+</script>
+
+</body>
+</html>
