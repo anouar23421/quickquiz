@@ -1,12 +1,22 @@
 // Configuration Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyC3IbprFSjAa5qAAnTcHdIKT2mfeVcXI1s",
+
+  apiKey: "AIzaSyC3IbprFSjAa5qAAnTcHdIKT2mfeVcxI1s",
+
   authDomain: "quickquiz-88641.firebaseapp.com",
+
   projectId: "quickquiz-88641",
+
   storageBucket: "quickquiz-88641.firebasestorage.app",
+
   messagingSenderId: "183369823810",
-  appId: "1:183369823810:web:5160541c7c49543ab7dfdb"
+
+  appId: "1:183369823810:web:5160541c7c49543ab7dfdb",
+
+  measurementId: "G-CM4SDR8HKR"
+
 };
+
 
 // Emails autorisés pour l'admin
 const ADMIN_EMAILS = [
