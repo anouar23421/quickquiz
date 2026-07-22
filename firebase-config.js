@@ -11,7 +11,7 @@ const firebaseConfig = {
 // Emails autorisés pour l'admin
 const ADMIN_EMAILS = [
   "anoirelbouzaidi2@gmail.com" 
-
+];
 // Initialisation
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
