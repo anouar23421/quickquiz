@@ -451,24 +451,35 @@
   <div class="quiz-box" id="quizBox"></div>
 </div>
  
+<!-- ---------- POST MODAL ---------- -->
+<div class="quiz-overlay" id="postOverlay">
+  <div class="quiz-box" id="postBox" style="max-width:640px;"></div>
+</div>
+ 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script>
 // ---------- Charge les articles / actus / médias postés depuis l'admin ----------
+let allPosts = [];
+ 
 function loadPublicPosts(){
   const feed = document.getElementById('postsFeed');
   if(typeof db === 'undefined'){ feed.innerHTML = ''; return; }
   db.collection('posts').orderBy('createdAt','desc').limit(9).get().then(snap=>{
     if(snap.empty){ feed.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">Aucune publication pour le moment.</p>'; return; }
     feed.innerHTML = '';
+    allPosts = [];
     snap.forEach(doc=>{
       const p = doc.data();
+      allPosts.push(p);
+      const index = allPosts.length - 1;
       const card = document.createElement('div');
       card.className = 'post-card';
+      card.style.cursor = 'pointer';
       let media = '';
       if(p.mediaUrl && p.mediaType === 'image') media = `<img src="${p.mediaUrl}" alt="${p.title}">`;
-      if(p.mediaUrl && p.mediaType === 'video') media = `<video src="${p.mediaUrl}" controls></video>`;
+      if(p.mediaUrl && p.mediaType === 'video') media = `<video src="${p.mediaUrl}" muted></video>`;
       card.innerHTML = `
         ${media}
         <div class="post-body">
@@ -477,9 +488,31 @@ function loadPublicPosts(){
           <p>${(p.content || '').slice(0,140)}</p>
         </div>
       `;
+      card.addEventListener('click', ()=> openPost(index));
       feed.appendChild(card);
     });
   }).catch(()=>{ feed.innerHTML = ''; });
+}
+ 
+function openPost(index){
+  const p = allPosts[index];
+  const postOverlay = document.getElementById('postOverlay');
+  const postBox = document.getElementById('postBox');
+  let media = '';
+  if(p.mediaUrl && p.mediaType === 'image') media = `<img src="${p.mediaUrl}" alt="${p.title}" style="width:100%;border-radius:14px;margin-bottom:18px;">`;
+  if(p.mediaUrl && p.mediaType === 'video') media = `<video src="${p.mediaUrl}" controls style="width:100%;border-radius:14px;margin-bottom:18px;"></video>`;
+  postBox.innerHTML = `
+    <button class="quiz-close" onclick="closePost()">✕</button>
+    <span class="post-type">${p.type === 'blog' ? 'Blog' : p.type === 'actu' ? 'Actu' : 'Média'}</span>
+    <h2 style="font-family:var(--font-display);font-size:1.4rem;margin:12px 0 16px;">${p.title}</h2>
+    ${media}
+    <p style="color:var(--muted);white-space:pre-wrap;line-height:1.7;">${p.content || ''}</p>
+  `;
+  postOverlay.classList.add('active');
+}
+ 
+function closePost(){
+  document.getElementById('postOverlay').classList.remove('active');
 }
  
 // ---------- Fusionne les questions ajoutées depuis l'admin dans QUIZ_DATA ----------
@@ -699,4 +732,3 @@ function currentKeyOf(quizObj){
  
 </body>
 </html>
- 
