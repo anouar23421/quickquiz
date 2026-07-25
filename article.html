@@ -32,7 +32,13 @@
   }
   .back-link:hover{color:var(--cream);}
 
-  main{max-width:720px;margin:0 auto;padding:50px 6% 100px;}
+  main{max-width:840px;margin:0 auto;padding:50px 6% 100px;}
+  .article-card{
+    background:var(--ink-2);
+    border:1px solid rgba(244,241,255,0.08);
+    border-radius:24px;
+    padding:44px;
+  }
   .post-type{
     display:inline-block;font-size:0.75rem;font-weight:700;color:var(--ink);
     background:var(--gold);padding:4px 12px;border-radius:100px;margin-bottom:18px;text-transform:uppercase;
@@ -44,6 +50,7 @@
     line-height:1.15;
     margin-bottom:24px;
     color:var(--cream);
+    text-align:left;
   }
   .meta{color:var(--muted);font-size:0.85rem;margin-bottom:28px;}
   .media-wrap img, .media-wrap video{
@@ -56,6 +63,23 @@
     white-space:pre-wrap;
   }
   .article-body p{margin-bottom:1.2em;}
+  /* Neutralise tout style importé dans le contenu (couleur, centrage, police)
+     pour que l'article reste toujours lisible, quel que soit le texte collé. */
+  .article-body *{
+    color:var(--cream) !important;
+    background:transparent !important;
+    text-align:left !important;
+    font-family:var(--font-body) !important;
+  }
+  .article-body strong, .article-body b{
+    color:var(--gold) !important;
+    font-weight:700 !important;
+  }
+  .article-body h1, .article-body h2, .article-body h3{
+    font-family:var(--font-display) !important;
+    font-size:1.3rem !important;
+    margin:28px 0 14px !important;
+  }
 
   .state-msg{color:var(--muted);text-align:center;padding:80px 20px;font-size:0.95rem;}
 
@@ -112,13 +136,15 @@
 
       document.title = p.title + ' — QuickQuiz';
       main.innerHTML = `
-        <span class="post-type">${typeLabel}</span>
-        <h1>${p.title}</h1>
-        ${media}
-        <div class="article-body">${(p.content || '').replace(/\n/g,'<br>')}</div>
-        <div class="cta-bottom">
-          <p>Envie de tester tes connaissances ?</p>
-          <a href="index.html#categories" class="btn-primary">Lancer un quiz</a>
+        <div class="article-card">
+          <span class="post-type">${typeLabel}</span>
+          <h1>${p.title}</h1>
+          ${media}
+          <div class="article-body">${(p.content || '').replace(/\n/g,'<br>')}</div>
+          <div class="cta-bottom">
+            <p>Envie de tester tes connaissances ?</p>
+            <a href="index.html#categories" class="btn-primary">Lancer un quiz</a>
+          </div>
         </div>
       `;
     }).catch(err=>{
