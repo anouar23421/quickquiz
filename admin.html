@@ -175,81 +175,43 @@
     });
   });
 
-  // ---------- POSTS (blog / actu / media) avec Sécurité Client ----------
+  // ---------- POSTS (blog / actu / media) ----------
   async function submitPost(){
     const type = document.getElementById('postType').value;
     const title = document.getElementById('postTitle').value.trim();
     const content = document.getElementById('postContent').value.trim();
     const fileInput = document.getElementById('postFile');
     const msg = document.getElementById('postMsg');
-
-    if(!title){ 
-      msg.textContent = "Ajoute au moins un titre."; 
-      msg.className = 'error'; 
-      return; 
-    }
+    if(!title){ msg.textContent = "Ajoute au moins un titre."; msg.className='error'; return; }
+    msg.textContent = "Publication en cours..."; msg.className='';
 
     let mediaUrl = null, mediaType = null;
-
     try{
       if(fileInput.files.length > 0){
         const file = fileInput.files[0];
-
-        // 🛑 1. VERIFICATION FORMAT (JPG, PNG, WEBP, MP4, MOV)
-        const allowedTypes = [
-          'image/jpeg', 'image/png', 'image/webp', 
-          'video/mp4', 'video/quicktime'
-        ];
-        if(!allowedTypes.includes(file.type)){
-          msg.textContent = "Format non autorisé (acceptés : JPG, PNG, WEBP, MP4, MOV).";
-          msg.className = 'error';
-          return;
-        }
-
-        // 🛑 2. VERIFICATION TAILLE MAX (10 Mo)
-        const maxSizeBytes = 10 * 1024 * 1024; // 10 Mo
-        if(file.size > maxSizeBytes){
-          msg.textContent = "Fichier trop lourd (maximum 10 Mo autorisé).";
-          msg.className = 'error';
-          return;
-        }
-
-        msg.textContent = "Publication et envoi du fichier en cours..."; 
-        msg.className = '';
-
         mediaType = file.type.startsWith('video') ? 'video' : 'image';
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-
         const cloudRes = await fetch(
           `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${mediaType === 'video' ? 'video' : 'image'}/upload`,
           { method: 'POST', body: formData }
         );
-
         const cloudData = await cloudRes.json();
         if(!cloudData.secure_url) throw new Error(cloudData.error?.message || "Échec de l'upload Cloudinary");
         mediaUrl = cloudData.secure_url;
-      } else {
-        msg.textContent = "Publication en cours..."; 
-        msg.className = '';
       }
-
       await db.collection('posts').add({
         type, title, content, mediaUrl, mediaType,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
-
-      msg.textContent = "Publié avec succès !"; 
-      msg.className = 'ok-msg';
-      document.getElementById('postTitle').value = '';
-      document.getElementById('postContent').value = '';
-      fileInput.value = '';
+      msg.textContent = "Publié !"; msg.className='ok-msg';
+      document.getElementById('postTitle').value='';
+      document.getElementById('postContent').value='';
+      fileInput.value='';
       loadPosts();
-
     } catch(err){
-      msg.textContent = "Erreur : " + err.message; 
-      msg.className = 'error';
+      msg.textContent = "Erreur : " + err.message; msg.className='error';
     }
   }
 
