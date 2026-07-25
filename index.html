@@ -17,7 +17,7 @@
     --font-body:'Inter', system-ui, sans-serif;
   }
   @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap');
- 
+
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
@@ -28,7 +28,7 @@
     overflow-x:hidden;
   }
   a{color:inherit;text-decoration:none;}
- 
+
   /* ---------- NAV ---------- */
   nav{
     position:sticky;top:0;z-index:50;
@@ -53,7 +53,7 @@
     padding:10px 18px;
     border-radius:100px;
   }
- 
+
   /* ---------- HERO ---------- */
   .hero{
     padding:80px 6% 60px;
@@ -114,7 +114,7 @@
     font-weight:600;
     color:var(--cream);
   }
- 
+
   /* buzzer visual */
   .buzzer-wrap{display:flex;justify-content:center;align-items:center;position:relative;}
   .buzzer{
@@ -151,7 +151,7 @@
   @media(prefers-reduced-motion: reduce){
     .buzzer, .buzzer:before{animation:none;}
   }
- 
+
   /* ---------- STRIP ---------- */
   .strip{
     border-top:1px solid rgba(244,241,255,0.08);
@@ -163,7 +163,7 @@
     letter-spacing:0.04em;
   }
   .strip strong{color:var(--gold);}
- 
+
   /* ---------- CATEGORIES ---------- */
   .section{padding:70px 6%;max-width:1300px;margin:0 auto;}
   .section-head{margin-bottom:36px;max-width:600px;}
@@ -175,7 +175,7 @@
     letter-spacing:-0.5px;
   }
   .section-head p{color:var(--muted);margin-top:10px;}
- 
+
   .cat-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
@@ -201,7 +201,7 @@
     background:var(--gold);
     padding:3px 9px;border-radius:100px;font-weight:700;
   }
- 
+
   /* ---------- QUIZ MODAL ---------- */
   .quiz-overlay{
     position:fixed;inset:0;
@@ -265,7 +265,7 @@
   .quiz-option.correct{background:rgba(58,222,122,0.15);border-color:var(--ok);}
   .quiz-option.wrong{background:rgba(255,59,59,0.15);border-color:var(--buzzer);}
   .quiz-option:disabled{cursor:default;}
- 
+
   .result-box{text-align:center;}
   .result-score{
     font-family:var(--font-display);
@@ -275,7 +275,7 @@
   }
   .result-msg{color:var(--muted);margin-bottom:26px;}
   .result-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
- 
+
   /* ---------- AD SLOT ---------- */
   .ad-slot{
     border:1px dashed rgba(244,241,255,0.2);
@@ -286,7 +286,7 @@
     font-size:0.8rem;
     margin:50px 0;
   }
- 
+
   /* ---------- HOW ---------- */
   .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
   .step{
@@ -303,7 +303,7 @@
   }
   .step h3{font-family:var(--font-display);font-size:1rem;margin-bottom:8px;}
   .step p{color:var(--muted);font-size:0.9rem;}
- 
+
   /* ---------- TIKTOK CTA ---------- */
   .tiktok-cta{
     background:linear-gradient(135deg, var(--ink-2), #241f3d);
@@ -319,13 +319,16 @@
     font-size:1.5rem;font-weight:700;max-width:420px;
   }
   .tiktok-cta p{color:var(--muted);margin-top:8px;max-width:420px;}
- 
+
   .post-card{
     background:var(--ink-2);
     border:1px solid rgba(244,241,255,0.08);
     border-radius:18px;
     overflow:hidden;
+    cursor:pointer;
+    transition:transform 0.18s ease, border-color 0.18s ease;
   }
+  .post-card:hover{transform:translateY(-4px);border-color:var(--gold);}
   .post-card img, .post-card video{width:100%;display:block;max-height:200px;object-fit:cover;}
   .post-card .post-body{padding:20px;}
   .post-card .post-type{
@@ -334,7 +337,7 @@
   }
   .post-card h3{font-family:var(--font-display);font-size:1rem;margin-bottom:6px;}
   .post-card p{color:var(--muted);font-size:0.85rem;}
- 
+
   footer{
     text-align:center;
     padding:34px 6%;
@@ -342,7 +345,7 @@
     font-size:0.8rem;
     border-top:1px solid rgba(244,241,255,0.08);
   }
- 
+
   @media(max-width:860px){
     .hero{grid-template-columns:1fr;}
     .buzzer-wrap{order:-1;}
@@ -352,12 +355,12 @@
 </style>
 </head>
 <body>
- 
+
 <nav>
   <div class="logo">Quick<span>Quiz</span></div>
   <a href="#categories" class="nav-cta">Jouer maintenant</a>
 </nav>
- 
+
 <section class="hero">
   <div>
     <span class="eyebrow">● Nouveau quiz chaque jour</span>
@@ -374,14 +377,14 @@
     </div>
   </div>
 </section>
- 
+
 <div class="strip">
   <div><strong>6</strong> catégories</div>
   <div><strong>+30</strong> questions</div>
   <div><strong>0€</strong> — gratuit à vie</div>
   <div><strong>60s</strong> par quiz</div>
 </div>
- 
+
 <section class="section" id="categories">
   <div class="section-head">
     <span class="eyebrow">Catégories</span>
@@ -390,13 +393,13 @@
   </div>
   <div class="cat-grid" id="catGrid"></div>
 </section>
- 
+
 <section class="section">
   <div class="ad-slot">
     Emplacement publicitaire (ex. Google AdSense) — à activer une fois le site en ligne et le trafic lancé.
   </div>
 </section>
- 
+
 <section class="section">
   <div class="section-head">
     <span class="eyebrow">Comment ça marche</span>
@@ -420,7 +423,7 @@
     </div>
   </div>
 </section>
- 
+
 <section class="section" id="actus">
   <div class="section-head">
     <span class="eyebrow">Actus & Blog</span>
@@ -431,7 +434,7 @@
     <p style="color:var(--muted);font-size:0.85rem;">Chargement des dernières publications...</p>
   </div>
 </section>
- 
+
 <section class="section" id="tiktok">
   <div class="tiktok-cta">
     <div>
@@ -441,42 +444,35 @@
     <a href="https://www.tiktok.com/@quickquiz" target="_blank" class="btn-primary">Suivre @quickquiz</a>
   </div>
 </section>
- 
+
 <footer>
   QuickQuiz — fait avec 🧠 pour les curieux. © 2026
 </footer>
- 
+
 <!-- ---------- QUIZ MODAL ---------- -->
 <div class="quiz-overlay" id="overlay">
   <div class="quiz-box" id="quizBox"></div>
 </div>
- 
-<!-- ---------- POST MODAL ---------- -->
-<div class="quiz-overlay" id="postOverlay">
-  <div class="quiz-box" id="postBox" style="max-width:640px;"></div>
-</div>
- 
+
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script>
 // ---------- Charge les articles / actus / médias postés depuis l'admin ----------
 let allPosts = [];
- 
+
 function loadPublicPosts(){
   const feed = document.getElementById('postsFeed');
   if(typeof db === 'undefined'){ feed.innerHTML = ''; return; }
   db.collection('posts').orderBy('createdAt','desc').limit(9).get().then(snap=>{
     if(snap.empty){ feed.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">Aucune publication pour le moment.</p>'; return; }
     feed.innerHTML = '';
-    allPosts = [];
     snap.forEach(doc=>{
       const p = doc.data();
-      allPosts.push(p);
-      const index = allPosts.length - 1;
-      const card = document.createElement('div');
+      const card = document.createElement('a');
+      card.href = 'article.html?id=' + doc.id;
       card.className = 'post-card';
-      card.style.cursor = 'pointer';
+      card.style.display = 'block';
       let media = '';
       if(p.mediaUrl && p.mediaType === 'image') media = `<img src="${p.mediaUrl}" alt="${p.title}">`;
       if(p.mediaUrl && p.mediaType === 'video') media = `<video src="${p.mediaUrl}" muted></video>`;
@@ -488,33 +484,11 @@ function loadPublicPosts(){
           <p>${(p.content || '').slice(0,140)}</p>
         </div>
       `;
-      card.addEventListener('click', ()=> openPost(index));
       feed.appendChild(card);
     });
   }).catch(()=>{ feed.innerHTML = ''; });
 }
- 
-function openPost(index){
-  const p = allPosts[index];
-  const postOverlay = document.getElementById('postOverlay');
-  const postBox = document.getElementById('postBox');
-  let media = '';
-  if(p.mediaUrl && p.mediaType === 'image') media = `<img src="${p.mediaUrl}" alt="${p.title}" style="width:100%;border-radius:14px;margin-bottom:18px;">`;
-  if(p.mediaUrl && p.mediaType === 'video') media = `<video src="${p.mediaUrl}" controls style="width:100%;border-radius:14px;margin-bottom:18px;"></video>`;
-  postBox.innerHTML = `
-    <button class="quiz-close" onclick="closePost()">✕</button>
-    <span class="post-type">${p.type === 'blog' ? 'Blog' : p.type === 'actu' ? 'Actu' : 'Média'}</span>
-    <h2 style="font-family:var(--font-display);font-size:1.4rem;margin:12px 0 16px;">${p.title}</h2>
-    ${media}
-    <p style="color:var(--muted);white-space:pre-wrap;line-height:1.7;">${p.content || ''}</p>
-  `;
-  postOverlay.classList.add('active');
-}
- 
-function closePost(){
-  document.getElementById('postOverlay').classList.remove('active');
-}
- 
+
 // ---------- Fusionne les questions ajoutées depuis l'admin dans QUIZ_DATA ----------
 function loadExtraQuestions(callback){
   if(typeof db === 'undefined'){ callback(); return; }
@@ -529,7 +503,7 @@ function loadExtraQuestions(callback){
     callback();
   }).catch(()=>callback());
 }
- 
+
 const QUIZ_DATA = {
   culture: {
     icon:'🧠', name:'Culture générale', desc:'Un peu de tout, pour briller partout.',
@@ -592,7 +566,7 @@ const QUIZ_DATA = {
     ]
   }
 };
- 
+
 const catGrid = document.getElementById('catGrid');
 function renderCatGrid(){
   catGrid.innerHTML = '';
@@ -612,7 +586,7 @@ function renderCatGrid(){
 renderCatGrid();
 loadExtraQuestions(renderCatGrid);
 loadPublicPosts();
- 
+
 const overlay = document.getElementById('overlay');
 const quizBox = document.getElementById('quizBox');
 let currentQuiz = null;
@@ -621,7 +595,7 @@ let score = 0;
 let timer = null;
 let timeLeft = 12;
 const TIME_TOTAL = 12;
- 
+
 function startQuiz(key){
   currentQuiz = QUIZ_DATA[key];
   qIndex = 0;
@@ -629,18 +603,18 @@ function startQuiz(key){
   overlay.classList.add('active');
   renderQuestion();
 }
- 
+
 function closeQuiz(){
   overlay.classList.remove('active');
   clearInterval(timer);
 }
- 
+
 function renderQuestion(){
   clearInterval(timer);
   timeLeft = TIME_TOTAL;
   const item = currentQuiz.questions[qIndex];
   const letters = ['A','B','C','D'];
- 
+
   quizBox.innerHTML = `
     <button class="quiz-close" onclick="closeQuiz()">✕</button>
     <div class="quiz-top">
@@ -663,11 +637,11 @@ function renderQuestion(){
       `).join('')}
     </div>
   `;
- 
+
   document.querySelectorAll('.quiz-option').forEach(btn=>{
     btn.addEventListener('click', ()=> selectAnswer(parseInt(btn.dataset.i)));
   });
- 
+
   const circle = document.getElementById('timerFg');
   const numEl = document.getElementById('timerNum');
   const circumference = 131.9;
@@ -681,7 +655,7 @@ function renderQuestion(){
     }
   }, 1000);
 }
- 
+
 function selectAnswer(i){
   clearInterval(timer);
   const item = currentQuiz.questions[qIndex];
@@ -693,7 +667,7 @@ function selectAnswer(i){
     if(oi === item.answer) o.classList.add('correct');
     else if(oi === i) o.classList.add('wrong');
   });
- 
+
   setTimeout(()=>{
     qIndex++;
     if(qIndex < currentQuiz.questions.length){
@@ -703,14 +677,14 @@ function selectAnswer(i){
     }
   }, 900);
 }
- 
+
 function renderResult(){
   const total = currentQuiz.questions.length;
   let msg = "Pas mal, reviens demain pour un nouveau score !";
   if(score === total) msg = "Score parfait. Tu es prêt pour TikTok Live !";
   else if(score >= total*0.6) msg = "Solide ! Encore un petit effort pour le sans-faute.";
   else msg = "Ça se travaille — retente ta chance !";
- 
+
   quizBox.innerHTML = `
     <button class="quiz-close" onclick="closeQuiz()">✕</button>
     <div class="result-box">
@@ -724,11 +698,11 @@ function renderResult(){
     </div>
   `;
 }
- 
+
 function currentKeyOf(quizObj){
   return Object.keys(QUIZ_DATA).find(k => QUIZ_DATA[k] === quizObj);
 }
 </script>
- 
+
 </body>
 </html>
