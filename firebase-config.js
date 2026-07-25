@@ -17,7 +17,7 @@ const ADMIN_EMAILS = [
 // Initialisation
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const auth = firebase.auth();
+const auth = (typeof firebase.auth === 'function') ? firebase.auth() : null;
 
 // Configuration Cloudinary
 const CLOUDINARY_CLOUD_NAME = "nu5tw53t";
